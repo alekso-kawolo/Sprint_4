@@ -64,3 +64,4 @@ build/
 hs_err_pid*
 replay_pid*
 >>>>>>> ac1560b293d65df0bddffafbb2e18b536d88899c
+/.idea/
