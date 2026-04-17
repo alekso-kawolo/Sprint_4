@@ -1,8 +1,12 @@
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import pageobject.MainPage;
-
+import java.util.Arrays;
+import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 
+@RunWith(Parameterized.class)
 public class AccordionTests extends BaseUITest {
 
     private static final String[] QUESTIONS = {
@@ -13,7 +17,7 @@ public class AccordionTests extends BaseUITest {
             "Можно ли продлить заказ или вернуть самокат раньше?",
             "Вы привозите зарядку вместе с самокатом?",
             "Можно ли отменить заказ?",
-            "Я жизу за МКАДом, привезёте?"
+            "Я живу за МКАДом, привезёте?"
     };
 
     private static final String[] ANSWERS = {
@@ -27,14 +31,28 @@ public class AccordionTests extends BaseUITest {
             "Да, обязательно. Всем самокатов! И Москве, и Московской области."
     };
 
+    private final int index;
+
+    public AccordionTests(int index) {
+        this.index = index;
+    }
+
+    @Parameterized.Parameters(name = "FAQ #{0}")
+    public static Collection<Object[]> data() {
+        Object[][] data = new Object[QUESTIONS.length][1];
+        for (int i = 0; i < QUESTIONS.length; i++) {
+            data[i] = new Object[]{i};
+        }
+        return Arrays.asList(data);
+    }
+
     @Test
-    public void testAccordion() {
+    public void testAccordionQuestion() {
         MainPage mainPage = new MainPage(driver).open();
         mainPage.acceptCookies();
 
-        for (int i = 0; i < QUESTIONS.length; i++) {
-            mainPage.openQuestion(i);
-            assertEquals(ANSWERS[i], mainPage.getAnswerText(i));
-        }
+        mainPage.openQuestion(index);
+
+        assertEquals(ANSWERS[index], mainPage.getAnswerText(index));
     }
 }
